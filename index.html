@@ -3,142 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우리의 결혼 준비 2027.06.05</title>
+<title>Our Wedding 2027.06.05</title>
 <style>
   :root {
-    --bg: #faf7f5; --panel: #ffffff; --text: #3b3234; --muted: #9a8e91;
-    --accent: #c9868f; --groom: #6c8ebf; --bride: #d98b9a; --line: #ece4e2;
-    --today: #f3e3e6; --wedding: #c9868f; --radius: 14px;
+    --bg: #E9E8E4; --ink: #121412; --mute: #8C8B87; --accent: #F26A21;
+    --hollow: #C9C8C4; --panel: #F5F4F1; --line: #DAD9D5;
+    --groom: #121412; --bride: #3F7F78;
     --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   }
-  /* 시안 B: 모던 다크 */
-  body.theme-b {
-    --bg: #161619; --panel: #222227; --text: #f1eff2; --muted: #8a8790;
-    --accent: #b9a3ff; --groom: #5fb0c9; --bride: #ff8fa3; --line: #34333a;
-    --today: #33303d; --wedding: #b9a3ff;
+  body.night {
+    --bg: #121412; --ink: #EDECE8; --mute: #8C8B87; --panel: #1C1E1C;
+    --hollow: #3A3C39; --line: #2E302D; --groom: #EDECE8; --bride: #3F9C92;
   }
-  /* 시안 C: 세이지 내추럴 */
-  body.theme-c {
-    --bg: #f3f5ef; --panel: #ffffff; --text: #33403a; --muted: #8b9790;
-    --accent: #7d9a7f; --groom: #5b7fa6; --bride: #c58a6e; --line: #e2e7df;
-    --today: #e8efe4; --wedding: #7d9a7f;
+  body.warm {
+    --bg: #F1E6D6; --ink: #2B211A; --mute: #8F7F6E; --panel: #F8F0E4;
+    --hollow: #CDBBA3; --line: #E0D0BA; --groom: #2B211A; --bride: #3F7F78;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
-  header { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; flex-wrap: wrap; gap: 12px; }
-  header h1 { font-size: 20px; margin: 0; }
-  header .dday { color: var(--accent); font-weight: 700; font-size: 14px; margin-top: 4px; }
-  .theme-select select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--text); }
-  .layout { display: grid; grid-template-columns: 1fr 380px; gap: 20px; padding: 0 28px 28px; }
-  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
-  .card { background: var(--panel); border-radius: var(--radius); padding: 20px; border: 1px solid var(--line); }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); min-height: 100vh; transition: background .3s, color .3s; }
+  .topbar { display: flex; justify-content: flex-end; padding: 16px 24px 0; }
+  .topbar select { padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-family: inherit; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 1fr 360px; gap: 40px; }
+  @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } }
 
   /* 캘린더 */
-  .cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .cal-head h2 { margin: 0; font-size: 18px; }
-  .btn { border: 1px solid var(--line); background: var(--panel); color: var(--text); padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
-  .btn:hover { border-color: var(--accent); }
-  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn.danger { color: #d05050; }
-  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-  .dow { text-align: center; font-size: 12px; color: var(--muted); padding: 6px 0; }
-  .day { min-height: 84px; border: 1px solid var(--line); border-radius: 10px; padding: 6px; cursor: pointer; position: relative; background: var(--panel); }
-  .day:hover { border-color: var(--accent); }
-  .day.other { opacity: .35; }
-  .day.today { background: var(--today); }
-  .day.selected { outline: 2px solid var(--accent); }
-  .day.wedding { background: var(--wedding); color: #fff; }
-  .day.wedding .num { color: #fff; }
-  .num { font-size: 13px; font-weight: 600; }
-  .dots { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 6px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .dot.groom { background: var(--groom); }
-  .dot.bride { background: var(--bride); }
-  .dot.done { opacity: .35; }
-  .wedding-tag { font-size: 10px; margin-top: 4px; font-weight: 700; }
+  .cal { max-width: 520px; width: 100%; }
+  .big { font-size: 128px; font-weight: 800; line-height: .9; letter-spacing: -5px; margin: 0; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; }
+  .month { font-size: 24px; font-weight: 500; text-transform: uppercase; }
+  .year { font-size: 24px; color: var(--mute); display: block; }
+  .weekday { font-size: 24px; font-weight: 500; }
+  .nav { margin: 22px 0 28px; display: flex; gap: 8px; }
+  .nav button { background: none; border: 0; color: var(--ink); font-size: 28px; cursor: pointer; padding: 0 12px 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px 12px; justify-items: center; }
+  .dow { font-size: 13px; color: var(--mute); }
+  .dot {
+    width: 100%; max-width: 52px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--ink); position: relative; padding: 0;
+  }
+  .dot.future { background: transparent; box-shadow: inset 0 0 0 2px var(--hollow); }
+  .dot.today { background: var(--accent); }
+  .dot.other { opacity: .25; }
+  .dot.sel { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink); }
+  .dot.wed { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .dot.has::after {
+    content: ''; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px;
+    transform: translate(-50%, -50%); border-radius: 50%; background: var(--bg);
+  }
+  .dot.future.has::after { background: var(--ink); }
+  .dot.today.has::after { background: #fff; }
+  .foot { text-align: center; letter-spacing: 2px; font-size: 12px; color: var(--mute); margin-top: 48px; }
 
   /* 우측 패널 */
-  .panel h2 { margin: 0 0 4px; font-size: 18px; }
-  .panel .sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
-  .filters { display: flex; gap: 6px; margin-bottom: 14px; }
-  .filters button { flex: 1; }
-  .filters button.active { background: var(--text); color: var(--panel); border-color: var(--text); }
-  .form { display: grid; gap: 8px; padding: 14px; border: 1px dashed var(--line); border-radius: 10px; margin-bottom: 16px; }
-  .form input, .form select, .form textarea {
-    width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
-    background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px;
+  .panel { background: var(--panel); border-radius: 20px; padding: 22px; align-self: start; position: sticky; top: 24px; }
+  .panel h2 { margin: 0; font-size: 20px; }
+  .sub { color: var(--mute); font-size: 13px; margin: 4px 0 12px; }
+  .bar { height: 6px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  .bar div { height: 100%; background: var(--accent); transition: width .3s; }
+  .filters { display: flex; gap: 6px; margin: 16px 0; }
+  .btn { border: 1px solid var(--line); background: var(--bg); color: var(--ink); padding: 7px 12px; border-radius: 999px; cursor: pointer; font-size: 13px; font-family: inherit; }
+  .btn.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .filters .btn { flex: 1; }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.danger { color: #C94A2A; }
+  form { display: grid; gap: 8px; margin-bottom: 14px; }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-family: inherit; font-size: 14px;
   }
-  .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .form .actions { display: flex; gap: 6px; justify-content: flex-end; }
-  .owner-toggle { display: flex; gap: 6px; }
-  .owner-toggle label { flex: 1; text-align: center; padding: 8px; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; font-size: 14px; }
-  .owner-toggle input { display: none; }
-  .owner-toggle input:checked + span { font-weight: 700; }
-  .owner-toggle label:has(input:checked) { border-color: var(--accent); background: var(--today); }
-
-  .group-title { font-size: 13px; font-weight: 700; margin: 16px 0 8px; display: flex; align-items: center; gap: 6px; }
-  .group-title i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-  .todo { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
-  .todo input[type=checkbox] { margin-top: 3px; accent-color: var(--accent); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .owners { display: flex; gap: 6px; }
+  .owners label { flex: 1; text-align: center; padding: 9px; border-radius: 10px; border: 1px solid var(--line); cursor: pointer; font-size: 14px; }
+  .owners input { display: none; }
+  .owners label:has(input:checked) { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .actions { display: flex; justify-content: flex-end; gap: 6px; }
+  .group { font-size: 13px; font-weight: 700; margin: 18px 0 8px; display: flex; align-items: center; gap: 6px; }
+  .group i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .todo { display: flex; gap: 10px; padding: 12px; border-radius: 12px; background: var(--bg); margin-bottom: 8px; }
+  .todo input[type=checkbox] { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--accent); flex: none; }
   .todo .body { flex: 1; min-width: 0; }
   .todo .title { font-size: 14px; word-break: break-word; }
-  .todo.done .title { text-decoration: line-through; color: var(--muted); }
-  .todo .meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .todo.done .title { text-decoration: line-through; color: var(--mute); }
+  .todo .meta { font-size: 12px; color: var(--mute); margin-top: 4px; }
   .todo .tools { display: flex; flex-direction: column; gap: 4px; }
-  .todo .tools button { font-size: 12px; padding: 4px 8px; }
-  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 18px 0; }
-  .progress { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
-  .progress div { height: 100%; background: var(--accent); transition: width .3s; }
+  .todo .tools .btn { padding: 4px 9px; font-size: 12px; }
+  .empty { color: var(--mute); font-size: 13px; text-align: center; padding: 20px 0; }
 </style>
 </head>
 <body>
-<header>
-  <div>
-    <h1>💍 우리의 결혼 준비</h1>
-    <div class="dday" id="dday"></div>
-  </div>
-  <div class="theme-select">
-    <select id="themeSelect" aria-label="디자인 시안">
-      <option value="a">시안 A · 로즈 웨딩</option>
-      <option value="b">시안 B · 모던 다크</option>
-      <option value="c">시안 C · 세이지 내추럴</option>
-    </select>
-  </div>
-</header>
+<div class="topbar">
+  <select id="theme" aria-label="디자인 시안">
+    <option value="a">시안 A · 페이퍼</option>
+    <option value="b">시안 B · 나이트</option>
+    <option value="c">시안 C · 웜</option>
+  </select>
+</div>
 
-<div class="layout">
-  <!-- 캘린더 -->
-  <section class="card">
-    <div class="cal-head">
-      <button class="btn" id="prev">‹ 이전</button>
-      <h2 id="monthTitle"></h2>
-      <div style="display:flex; gap:6px">
-        <button class="btn" id="today">오늘</button>
-        <button class="btn" id="next">다음 ›</button>
+<div class="wrap">
+  <section class="cal">
+    <h1 class="big" id="bigDay"></h1>
+    <div class="head">
+      <div>
+        <div class="month" id="month"></div>
+        <span class="year" id="year"></span>
       </div>
+      <div class="weekday" id="weekday"></div>
+    </div>
+    <div class="nav">
+      <button id="prev" aria-label="이전 달">‹</button>
+      <button id="next" aria-label="다음 달">›</button>
     </div>
     <div class="grid" id="dowRow"></div>
-    <div class="grid" id="calGrid"></div>
+    <div class="grid" id="calGrid" style="margin-top:14px"></div>
+    <div class="foot">LESS BUT BETTER · D-<span id="dday"></span></div>
   </section>
 
-  <!-- 우측 패널: 월별 todo -->
-  <aside class="card panel">
+  <aside class="panel">
     <h2 id="panelTitle"></h2>
     <div class="sub" id="panelSub"></div>
-    <div class="progress"><div id="progressBar" style="width:0"></div></div>
-    <div class="sub" id="progressText"></div>
+    <div class="bar"><div id="progress" style="width:0"></div></div>
 
     <div class="filters">
-      <button class="btn active" data-filter="all">전체</button>
-      <button class="btn" data-filter="groom">신랑</button>
-      <button class="btn" data-filter="bride">신부</button>
+      <button class="btn on" data-f="all">전체</button>
+      <button class="btn" data-f="groom">신랑</button>
+      <button class="btn" data-f="bride">신부</button>
     </div>
 
-    <form class="form" id="todoForm">
-      <input type="text" id="title" placeholder="할 일을 입력하세요 (예: 웨딩홀 계약금 입금)" required>
-      <div class="owner-toggle">
-        <label><input type="radio" name="owner" value="groom" checked><span>🤵 신랑 담당</span></label>
-        <label><input type="radio" name="owner" value="bride"><span>👰 신부 담당</span></label>
+    <form id="todoForm">
+      <input id="title" placeholder="할 일 (예: 웨딩홀 계약금 입금)" required>
+      <div class="owners">
+        <label><input type="radio" name="owner" value="groom" checked>🤵 신랑</label>
+        <label><input type="radio" name="owner" value="bride">👰 신부</label>
       </div>
       <div class="row">
         <input type="date" id="date" required>
@@ -155,126 +150,115 @@
       </div>
     </form>
 
-    <div id="todoList"></div>
+    <div id="list"></div>
   </aside>
 </div>
 
 <script>
 (function () {
-  const WEDDING = new Date(2027, 5, 5); // 2027-06-05
-  const STORE_KEY = 'wedding-todos-v1';
-  const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  const WEDDING = '2027-06-05';
+  const KEY = 'wedding-todos-v2';
+  const THEME_KEY = 'wedding-theme-v2';
+  const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const DOW = ['M','T','W','T','F','S','S'];
 
-  let todos = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
-  let viewYear = new Date().getFullYear();
-  let viewMonth = new Date().getMonth();
-  let selectedDate = fmt(new Date());
+  let todos = JSON.parse(localStorage.getItem(KEY) || '[]');
+  const now = new Date();
+  let viewY = now.getFullYear(), viewM = now.getMonth();
+  let sel = fmt(now);
   let filter = 'all';
-  let editingId = null;
+  let editId = null;
 
-  const $ = (id) => document.getElementById(id);
-  const save = () => localStorage.setItem(STORE_KEY, JSON.stringify(todos));
-  function fmt(d) {
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  }
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const $ = id => document.getElementById(id);
+  const p2 = n => String(n).padStart(2, '0');
+  function fmt(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); }
+  function parse(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+  const save = () => localStorage.setItem(KEY, JSON.stringify(todos));
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  // D-day
-  function renderDday() {
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const diff = Math.round((WEDDING - today) / 86400000);
-    $('dday').textContent = diff > 0 ? `웨딩데이까지 D-${diff}` : diff === 0 ? '오늘이 웨딩데이입니다! 💐' : `웨딩데이 D+${-diff}`;
-  }
-
-  // 캘린더
-  function renderCalendar() {
-    $('monthTitle').textContent = `${viewYear}년 ${viewMonth + 1}월`;
+  function render() {
+    const today = fmt(new Date());
+    const sd = parse(sel);
+    $('bigDay').textContent = sd.getDate();
+    $('month').textContent = MONTHS[sd.getMonth()];
+    $('year').textContent = sd.getFullYear();
+    $('weekday').textContent = DAYS[sd.getDay()];
+    const diff = Math.round((parse(WEDDING) - parse(today)) / 86400000);
+    $('dday').textContent = diff >= 0 ? diff : '0 (D+' + (-diff) + ')';
     $('dowRow').innerHTML = DOW.map(d => `<div class="dow">${d}</div>`).join('');
-    const first = new Date(viewYear, viewMonth, 1);
-    const start = new Date(viewYear, viewMonth, 1 - first.getDay());
-    const todayStr = fmt(new Date());
-    const weddingStr = fmt(WEDDING);
+
+    // 월 캘린더: 월요일 시작
+    const y = viewY, m = viewM;
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+    const days = new Date(y, m + 1, 0).getDate();
+    const total = Math.ceil((offset + days) / 7) * 7;
     let html = '';
-    for (let i = 0; i < 42; i++) {
-      const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    for (let i = 0; i < total; i++) {
+      const d = new Date(y, m, 1 - offset + i);
       const ds = fmt(d);
-      const dayTodos = todos.filter(t => t.date === ds);
-      const classes = ['day'];
-      if (d.getMonth() !== viewMonth) classes.push('other');
-      if (ds === todayStr) classes.push('today');
-      if (ds === selectedDate) classes.push('selected');
-      if (ds === weddingStr) classes.push('wedding');
-      const dots = dayTodos.slice(0, 6).map(t => `<span class="dot ${t.owner}${t.done ? ' done' : ''}"></span>`).join('');
-      html += `<div class="${classes.join(' ')}" data-date="${ds}">
-        <div class="num">${d.getDate()}</div>
-        ${ds === weddingStr ? '<div class="wedding-tag">💍 WEDDING</div>' : ''}
-        <div class="dots">${dots}</div>
-      </div>`;
+      const cls = ['dot'];
+      if (d.getMonth() !== m) cls.push('other');
+      if (ds === today) cls.push('today');
+      else if (ds > today) cls.push('future');
+      if (ds === sel) cls.push('sel');
+      if (ds === WEDDING) cls.push('wed');
+      if (todos.some(t => t.date === ds)) cls.push('has');
+      html += `<button class="${cls.join(' ')}" data-d="${ds}" aria-label="${ds}"></button>`;
     }
     $('calGrid').innerHTML = html;
+    $('month').title = y + '년 ' + (m + 1) + '월';
+    renderPanel();
   }
 
-  // 우측 패널 (월별 todo)
   function renderPanel() {
-    const monthPrefix = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}`;
-    const monthTodos = todos.filter(t => t.date.startsWith(monthPrefix));
+    const prefix = viewY + '-' + p2(viewM + 1);
+    const monthTodos = todos.filter(t => t.date.startsWith(prefix));
     const shown = monthTodos.filter(t => filter === 'all' || t.owner === filter);
+    const done = monthTodos.filter(t => t.done).length;
+    const pct = monthTodos.length ? Math.round(done / monthTodos.length * 100) : 0;
 
-    $('panelTitle').textContent = `${viewMonth + 1}월 할 일`;
-    $('panelSub').textContent = `${selectedDate} 기준 · 이번 달 ${monthTodos.length}개`;
-
-    const doneCount = monthTodos.filter(t => t.done).length;
-    const pct = monthTodos.length ? Math.round(doneCount / monthTodos.length * 100) : 0;
-    $('progressBar').style.width = pct + '%';
-    $('progressText').textContent = `완료 ${doneCount} / ${monthTodos.length} (${pct}%)`;
-
-    document.querySelectorAll('.filters button').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    $('panelTitle').textContent = (viewM + 1) + '월 할 일';
+    $('panelSub').textContent = `완료 ${done} / ${monthTodos.length} (${pct}%)`;
+    $('progress').style.width = pct + '%';
+    document.querySelectorAll('.filters .btn').forEach(b => b.classList.toggle('on', b.dataset.f === filter));
 
     const groups = [
       { key: 'groom', label: '🤵 신랑 담당', color: 'var(--groom)' },
       { key: 'bride', label: '👰 신부 담당', color: 'var(--bride)' },
     ].filter(g => filter === 'all' || filter === g.key);
 
-    if (!shown.length) {
-      $('todoList').innerHTML = `<div class="empty">이번 달 할 일이 없습니다.<br>위 폼에서 추가해 보세요.</div>`;
-      return;
-    }
-
-    $('todoList').innerHTML = groups.map(g => {
+    let out = '';
+    groups.forEach(g => {
       const items = shown.filter(t => t.owner === g.key).sort((a, b) => a.date.localeCompare(b.date) || (a.done - b.done));
-      if (!items.length) return '';
-      return `<div class="group-title"><i style="background:${g.color}"></i>${g.label} (${items.length})</div>` +
-        items.map(t => `
-          <div class="todo ${t.done ? 'done' : ''}">
-            <input type="checkbox" data-act="toggle" data-id="${t.id}" ${t.done ? 'checked' : ''}>
-            <div class="body">
-              <div class="title">${t.priority === 'high' ? '🔥 ' : ''}${escapeHtml(t.title)}</div>
-              <div class="meta">📅 ${t.date}${t.memo ? ' · ' + escapeHtml(t.memo) : ''}</div>
-            </div>
-            <div class="tools">
-              <button class="btn" data-act="edit" data-id="${t.id}">수정</button>
-              <button class="btn danger" data-act="delete" data-id="${t.id}">삭제</button>
-            </div>
-          </div>`).join('');
-    }).join('') || `<div class="empty">선택한 담당자의 할 일이 없습니다.</div>`;
+      if (!items.length) return;
+      out += `<div class="group"><i style="background:${g.color}"></i>${g.label} (${items.length})</div>`;
+      out += items.map(t => `
+        <div class="todo ${t.done ? 'done' : ''}">
+          <input type="checkbox" data-act="toggle" data-id="${t.id}" ${t.done ? 'checked' : ''}>
+          <div class="body">
+            <div class="title">${t.priority === 'high' ? '🔥 ' : ''}${esc(t.title)}</div>
+            <div class="meta">${t.date}${t.memo ? ' · ' + esc(t.memo) : ''}</div>
+          </div>
+          <div class="tools">
+            <button class="btn" data-act="edit" data-id="${t.id}">수정</button>
+            <button class="btn danger" data-act="delete" data-id="${t.id}">삭제</button>
+          </div>
+        </div>`).join('');
+    });
+    $('list').innerHTML = out || '<div class="empty">이번 달 할 일이 없습니다.</div>';
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-
-  function renderAll() { renderDday(); renderCalendar(); renderPanel(); }
-
-  // 폼: 생성 / 수정
   function resetForm() {
-    editingId = null;
+    editId = null;
     $('todoForm').reset();
-    $('date').value = selectedDate;
+    $('date').value = sel;
     $('submitBtn').textContent = '추가';
     $('cancelEdit').style.display = 'none';
   }
 
-  $('todoForm').addEventListener('submit', (e) => {
+  $('todoForm').addEventListener('submit', e => {
     e.preventDefault();
     const data = {
       title: $('title').value.trim(),
@@ -284,42 +268,37 @@
       memo: $('memo').value.trim(),
     };
     if (!data.title || !data.date) return;
-
-    if (editingId) {
-      const t = todos.find(x => x.id === editingId);
+    if (editId) {
+      const t = todos.find(x => x.id === editId);
       if (t) Object.assign(t, data);
     } else {
       todos.push({ id: uid(), done: false, ...data });
     }
     save();
-    // 추가한 날짜가 다른 달이면 해당 달로 이동
-    const d = new Date(data.date + 'T00:00:00');
-    selectedDate = data.date;
-    viewYear = d.getFullYear(); viewMonth = d.getMonth();
+    sel = data.date;
+    const d = parse(sel);
+    viewY = d.getFullYear(); viewM = d.getMonth();
     resetForm();
-    renderAll();
+    render();
   });
 
-  $('cancelEdit').addEventListener('click', resetForm);
+  $('cancelEdit').addEventListener('click', () => { resetForm(); render(); });
 
-  // 할 일 목록 액션 (이벤트 위임)
-  $('todoList').addEventListener('click', (e) => {
+  $('list').addEventListener('click', e => {
     const btn = e.target.closest('[data-act]');
     if (!btn) return;
     const id = btn.dataset.id;
     const t = todos.find(x => x.id === id);
     if (!t) return;
-    const act = btn.dataset.act;
-
-    if (act === 'delete') {
+    if (btn.dataset.act === 'delete') {
       if (!confirm('이 할 일을 삭제할까요?')) return;
       todos = todos.filter(x => x.id !== id);
       save();
-      if (editingId === id) resetForm();
-      renderAll();
+      if (editId === id) resetForm();
+      render();
     }
-    if (act === 'edit') {
-      editingId = id;
+    if (btn.dataset.act === 'edit') {
+      editId = id;
       $('title').value = t.title;
       document.querySelector(`input[name=owner][value=${t.owner}]`).checked = true;
       $('date').value = t.date;
@@ -331,56 +310,42 @@
     }
   });
 
-  $('todoList').addEventListener('change', (e) => {
-    if (e.target.dataset.act === 'toggle') {
-      const t = todos.find(x => x.id === e.target.dataset.id);
-      if (t) { t.done = e.target.checked; save(); renderAll(); }
-    }
+  $('list').addEventListener('change', e => {
+    if (e.target.dataset.act !== 'toggle') return;
+    const t = todos.find(x => x.id === e.target.dataset.id);
+    if (t) { t.done = e.target.checked; save(); render(); }
   });
 
-  // 캘린더 상호작용
-  $('calGrid').addEventListener('click', (e) => {
-    const cell = e.target.closest('.day');
+  $('calGrid').addEventListener('click', e => {
+    const cell = e.target.closest('[data-d]');
     if (!cell) return;
-    selectedDate = cell.dataset.date;
-    const d = new Date(selectedDate + 'T00:00:00');
-    if (d.getMonth() !== viewMonth || d.getFullYear() !== viewYear) {
-      viewYear = d.getFullYear(); viewMonth = d.getMonth();
-    }
-    if (!editingId) $('date').value = selectedDate;
-    renderAll();
+    sel = cell.dataset.d;
+    const d = parse(sel);
+    viewY = d.getFullYear(); viewM = d.getMonth();
+    if (!editId) $('date').value = sel;
+    render();
   });
 
-  $('prev').onclick = () => { viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderAll(); };
-  $('next').onclick = () => { viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderAll(); };
-  $('today').onclick = () => {
-    const now = new Date();
-    viewYear = now.getFullYear(); viewMonth = now.getMonth();
-    selectedDate = fmt(now);
-    if (!editingId) $('date').value = selectedDate;
-    renderAll();
-  };
+  $('prev').onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } render(); };
+  $('next').onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } render(); };
 
-  document.querySelector('.filters').addEventListener('click', (e) => {
-    const b = e.target.closest('button');
+  document.querySelector('.filters').addEventListener('click', e => {
+    const b = e.target.closest('.btn');
     if (!b) return;
-    filter = b.dataset.filter;
+    filter = b.dataset.f;
     renderPanel();
   });
 
-  // 디자인 시안 전환
-  const savedTheme = localStorage.getItem('wedding-theme') || 'a';
   function applyTheme(t) {
-    document.body.className = t === 'a' ? '' : 'theme-' + t;
-    $('themeSelect').value = t;
-    localStorage.setItem('wedding-theme', t);
+    document.body.className = t === 'b' ? 'night' : t === 'c' ? 'warm' : '';
+    $('theme').value = t;
+    localStorage.setItem(THEME_KEY, t);
   }
-  $('themeSelect').addEventListener('change', (e) => applyTheme(e.target.value));
-  applyTheme(savedTheme);
+  $('theme').addEventListener('change', e => applyTheme(e.target.value));
+  applyTheme(localStorage.getItem(THEME_KEY) || 'a');
 
-  // 초기화
-  $('date').value = selectedDate;
-  renderAll();
+  $('date').value = sel;
+  render();
 })();
 </script>
 </body>
