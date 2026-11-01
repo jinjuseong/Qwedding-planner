@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ko"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;우리의 결혼 준비 2027.06.05&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #faf7f5; --panel: #ffffff; --text: #3b3234; --muted: #9a8e91;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent: #c9868f; --groom: #6c8ebf; --bride: #d98b9a; --line: #ece4e2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--today: #f3e3e6; --wedding: #c9868f; --radius: 14px; --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* 시안 B: 모던 다크 */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body.theme-b {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #161619; --panel: #222227; --text: #f1eff2; --muted: #8a8790;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent: #b9a3ff; --groom: #5fb0c9; --bride: #ff8fa3; --line: #34333a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--today: #33303d; --wedding: #b9a3ff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* 시안 C: 세이지 내추럴 */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body.theme-c {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #f3f5ef; --panel: #ffffff; --text: #33403a; --muted: #8b9790;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent: #7d9a7f; --groom: #5b7fa6; --bride: #c58a6e; --line: #e2e7df;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--today: #e8efe4; --wedding: #7d9a7f;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>* { box-sizing: border-box; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; flex-wrap: wrap; gap: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header h1 { font-size: 20px; margin: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header .dday { color: var(--accent); font-weight: 700; font-size: 14px; margin-top: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.theme-select select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.layout { display: grid; grid-template-columns: 1fr 380px; gap: 20px; padding: 0 28px 28px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card { background: var(--panel); border-radius: var(--radius); padding: 20px; border: 1px solid var(--line); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* 캘린더 */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.cal-head h2 { margin: 0; font-size: 18px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn { border: 1px solid var(--line); background: var(--panel); color: var(--text); padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn:hover { border-color: var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn.danger { color: #d05050; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dow { text-align: center; font-size: 12px; color: var(--muted); padding: 6px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day { min-height: 84px; border: 1px solid var(--line); border-radius: 10px; padding: 6px; cursor: pointer; position: relative; background: var(--panel); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day:hover { border-color: var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day.other { opacity: .35; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day.today { background: var(--today); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day.selected { outline: 2px solid var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day.wedding { background: var(--wedding); color: #fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.day.wedding .num { color: #fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.num { font-size: 13px; font-weight: 600; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dots { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dot { width: 8px; height: 8px; border-radius: 50%; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dot.groom { background: var(--groom); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dot.bride { background: var(--bride); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dot.done { opacity: .35; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wedding-tag { font-size: 10px; margin-top: 4px; font-weight: 700; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* 우측 패널 */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.panel h2 { margin: 0 0 4px; font-size: 18px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.panel .sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.filters { display: flex; gap: 6px; margin-bottom: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.filters button { flex: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.filters button.active { background: var(--text); color: var(--panel); border-color: var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form { display: grid; gap: 8px; padding: 14px; border: 1px dashed var(--line); border-radius: 10px; margin-bottom: 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form input, .form select, .form textarea {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form .actions { display: flex; gap: 6px; justify-content: flex-end; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.owner-toggle { display: flex; gap: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.owner-toggle label { flex: 1; text-align: center; padding: 8px; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; font-size: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.owner-toggle input { display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.owner-toggle input:checked + span { font-weight: 700; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.owner-toggle label:has(input:checked) { border-color: var(--accent); background: var(--today); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.group-title { font-size: 13px; font-weight: 700; margin: 16px 0 8px; display: flex; align-items: center; gap: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.group-title i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo input[type=checkbox] { margin-top: 3px; accent-color: var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo .body { flex: 1; min-width: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo .title { font-size: 14px; word-break: break-word; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo.done .title { text-decoration: line-through; color: var(--muted); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo .meta { font-size: 12px; color: var(--muted); margin-top: 3px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo .tools { display: flex; flex-direction: column; gap: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.todo .tools button { font-size: 12px; padding: 4px 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.empty { color: var(--muted); font-size: 13px; text-align: center; padding: 18px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress div { height: 100%; background: var(--accent); transition: width .3s; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;💍 우리의 결혼 준비&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="dday" id="dday"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="theme-select"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="themeSelect" aria-label="디자인 시안"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="a"&gt;시안 A · 로즈 웨딩&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="b"&gt;시안 B · 모던 다크&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="c"&gt;시안 C · 세이지 내추럴&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="layout"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- 캘린더 --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="cal-head"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" id="prev"&gt;‹ 이전&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2 id="monthTitle"&gt;&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex; gap:6px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="today"&gt;오늘&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="next"&gt;다음 ›&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="grid" id="dowRow"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="grid" id="calGrid"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- 우측 패널: 월별 todo --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;aside class="card panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2 id="panelTitle"&gt;&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sub" id="panelSub"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="progress"&gt;&lt;div id="progressBar" style="width:0"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sub" id="progressText"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="filters"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn active" data-filter="all"&gt;전체&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" data-filter="groom"&gt;신랑&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn" data-filter="bride"&gt;신부&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;form class="form" id="todoForm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="text" id="title" placeholder="할 일을 입력하세요 (예: 웨딩홀 계약금 입금)" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="owner-toggle"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="radio" name="owner" value="groom" checked&gt;&lt;span&gt;🤵 신랑 담당&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="radio" name="owner" value="bride"&gt;&lt;span&gt;👰 신부 담당&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="date" id="date" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;select id="priority"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;option value="normal"&gt;보통&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;option value="high"&gt;중요&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;option value="low"&gt;여유&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;textarea id="memo" rows="2" placeholder="메모 (선택)"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button type="button" class="btn" id="cancelEdit" style="display:none"&gt;취소&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button type="submit" class="btn primary" id="submitBtn"&gt;추가&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="todoList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/aside&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">(function () {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const WEDDING = new Date(2027, 5, 5); // 2027-06-05</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const STORE_KEY = 'wedding-todos-v1';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const DOW = ['일', '월', '화', '수', '목', '금', '토'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let todos = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let viewYear = new Date().getFullYear();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let viewMonth = new Date().getMonth();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let selectedDate = fmt(new Date());</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let filter = 'all';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let editingId = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const $ = (id) =&gt; document.getElementById(id);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const save = () =&gt; localStorage.setItem(STORE_KEY, JSON.stringify(todos));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function fmt(d) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ownerName = (o) =&gt; (o === 'groom' ? '신랑' : '신부');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const uid = () =&gt; Date.now().toString(36) + Math.random().toString(36).slice(2, 6);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// D-day</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderDday() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const today = new Date(); today.setHours(0, 0, 0, 0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const diff = Math.round((WEDDING - today) / 86400000);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('dday').textContent = diff &gt; 0 ? `웨딩데이까지 D-${diff}` : diff === 0 ? '오늘이 웨딩데이입니다! 💐' : `웨딩데이 D+${-diff}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 캘린더</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderCalendar() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('monthTitle').textContent = `${viewYear}년 ${viewMonth + 1}월`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('dowRow').innerHTML = DOW.map(d =&gt; `&lt;div class="dow"&gt;${d}&lt;/div&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const first = new Date(viewYear, viewMonth, 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const start = new Date(viewYear, viewMonth, 1 - first.getDay());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const todayStr = fmt(new Date());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const weddingStr = fmt(WEDDING);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let html = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; 42; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const ds = fmt(d);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const dayTodos = todos.filter(t =&gt; t.date === ds);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const classes = ['day'];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (d.getMonth() !== viewMonth) classes.push('other');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ds === todayStr) classes.push('today');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ds === selectedDate) classes.push('selected');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ds === weddingStr) classes.push('wedding');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const dots = dayTodos.slice(0, 6).map(t =&gt; `&lt;span class="dot ${t.owner}${t.done ? ' done' : ''}"&gt;&lt;/span&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html += `&lt;div class="${classes.join(' ')}" data-date="${ds}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="num"&gt;${d.getDate()}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${ds === weddingStr ? '&lt;div class="wedding-tag"&gt;💍 WEDDING&lt;/div&gt;' : ''}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="dots"&gt;${dots}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('calGrid').innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 우측 패널 (월별 todo)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderPanel() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const monthPrefix = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const monthTodos = todos.filter(t =&gt; t.date.startsWith(monthPrefix));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const shown = monthTodos.filter(t =&gt; filter === 'all' || t.owner === filter);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('panelTitle').textContent = `${viewMonth + 1}월 할 일`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('panelSub').textContent = `${selectedDate} 기준 · 이번 달 ${monthTodos.length}개`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const doneCount = monthTodos.filter(t =&gt; t.done).length;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pct = monthTodos.length ? Math.round(doneCount / monthTodos.length * 100) : 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('progressBar').style.width = pct + '%';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('progressText').textContent = `완료 ${doneCount} / ${monthTodos.length} (${pct}%)`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.filters button').forEach(b =&gt; b.classList.toggle('active', b.dataset.filter === filter));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const groups = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ key: 'groom', label: '🤵 신랑 담당', color: 'var(--groom)' },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ key: 'bride', label: '👰 신부 담당', color: 'var(--bride)' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>].filter(g =&gt; filter === 'all' || filter === g.key);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!shown.length) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('todoList').innerHTML = `&lt;div class="empty"&gt;이번 달 할 일이 없습니다.&lt;br&gt;위 폼에서 추가해 보세요.&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('todoList').innerHTML = groups.map(g =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const items = shown.filter(t =&gt; t.owner === g.key).sort((a, b) =&gt; a.date.localeCompare(b.date) || (a.done - b.done));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!items.length) return '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return `&lt;div class="group-title"&gt;&lt;i style="background:${g.color}"&gt;&lt;/i&gt;${g.label} (${items.length})&lt;/div&gt;` +</p>
+<p class="p1"><span class="Apple-converted-space">        </span>items.map(t =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="todo ${t.done ? 'done' : ''}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="checkbox" data-act="toggle" data-id="${t.id}" ${t.done ? 'checked' : ''}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="body"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="title"&gt;${t.priority === 'high' ? '🔥 ' : ''}${escapeHtml(t.title)}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="meta"&gt;📅 ${t.date}${t.memo ? ' · ' + escapeHtml(t.memo) : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tools"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="btn" data-act="edit" data-id="${t.id}"&gt;수정&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="btn danger" data-act="delete" data-id="${t.id}"&gt;삭제&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}).join('') || `&lt;div class="empty"&gt;선택한 담당자의 할 일이 없습니다.&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function escapeHtml(s) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' }[c]));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderAll() { renderDday(); renderCalendar(); renderPanel(); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 폼: 생성 / 수정</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function resetForm() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>editingId = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('todoForm').reset();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('date').value = selectedDate;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('submitBtn').textContent = '추가';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('cancelEdit').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('todoForm').addEventListener('submit', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>title: $('title').value.trim(),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>owner: document.querySelector('input[name=owner]:checked').value,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>date: $('date').value,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>priority: $('priority').value,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>memo: $('memo').value.trim(),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!data.title || !data.date) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (editingId) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const t = todos.find(x =&gt; x.id === editingId);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (t) Object.assign(t, data);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>todos.push({ id: uid(), done: false, ...data });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 추가한 날짜가 다른 달이면 해당 달로 이동</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const d = new Date(data.date + 'T00:00:00');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>selectedDate = data.date;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>viewYear = d.getFullYear(); viewMonth = d.getMonth();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>resetForm();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('cancelEdit').addEventListener('click', resetForm);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 할 일 목록 액션 (이벤트 위임)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('todoList').addEventListener('click', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const btn = e.target.closest('[data-act]');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!btn) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const id = btn.dataset.id;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const t = todos.find(x =&gt; x.id === id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!t) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const act = btn.dataset.act;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (act === 'delete') {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!confirm('이 할 일을 삭제할까요?')) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>todos = todos.filter(x =&gt; x.id !== id);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>save();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (editingId === id) resetForm();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>renderAll();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (act === 'edit') {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>editingId = id;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('title').value = t.title;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelector(`input[name=owner][value=${t.owner}]`).checked = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('date').value = t.date;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('priority').value = t.priority;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('memo').value = t.memo || '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('submitBtn').textContent = '저장';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('cancelEdit').style.display = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('title').focus();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('todoList').addEventListener('change', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (e.target.dataset.act === 'toggle') {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const t = todos.find(x =&gt; x.id === e.target.dataset.id);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (t) { t.done = e.target.checked; save(); renderAll(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 캘린더 상호작용</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('calGrid').addEventListener('click', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const cell = e.target.closest('.day');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!cell) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>selectedDate = cell.dataset.date;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const d = new Date(selectedDate + 'T00:00:00');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (d.getMonth() !== viewMonth || d.getFullYear() !== viewYear) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>viewYear = d.getFullYear(); viewMonth = d.getMonth();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!editingId) $('date').value = selectedDate;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('prev').onclick = () =&gt; { viewMonth--; if (viewMonth &lt; 0) { viewMonth = 11; viewYear--; } renderAll(); };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('next').onclick = () =&gt; { viewMonth++; if (viewMonth &gt; 11) { viewMonth = 0; viewYear++; } renderAll(); };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('today').onclick = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const now = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>viewYear = now.getFullYear(); viewMonth = now.getMonth();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>selectedDate = fmt(now);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!editingId) $('date').value = selectedDate;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderAll();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelector('.filters').addEventListener('click', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = e.target.closest('button');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!b) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>filter = b.dataset.filter;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderPanel();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 디자인 시안 전환</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const savedTheme = localStorage.getItem('wedding-theme') || 'a';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function applyTheme(t) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.body.className = t === 'a' ? '' : 'theme-' + t;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('themeSelect').value = t;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>localStorage.setItem('wedding-theme', t);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('themeSelect').addEventListener('change', (e) =&gt; applyTheme(e.target.value));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>applyTheme(savedTheme);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 초기화</p>
+<p class="p1"><span class="Apple-converted-space">  </span>$('date').value = selectedDate;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderAll();</p>
+<p class="p1">})();</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
