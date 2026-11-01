@@ -16,7 +16,6 @@
   .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 1fr 360px; gap: 40px; }
   @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } }
 
-  /* 캘린더 */
   .cal { max-width: 520px; width: 100%; }
   .big { font-size: 128px; font-weight: 800; line-height: .9; letter-spacing: -5px; margin: 0; }
   .head { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; }
@@ -27,24 +26,17 @@
   .nav button { background: none; border: 0; color: var(--ink); font-size: 28px; cursor: pointer; padding: 0 12px 0 0; }
   .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px 12px; justify-items: center; }
   .dow { font-size: 13px; color: var(--mute); }
-  .dot {
-    width: 100%; max-width: 52px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer;
-    background: var(--ink); position: relative; padding: 0;
-  }
+  .dot { width: 100%; max-width: 52px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; background: var(--ink); position: relative; padding: 0; }
   .dot.future { background: transparent; box-shadow: inset 0 0 0 2px var(--hollow); }
   .dot.today { background: var(--accent); }
   .dot.other { opacity: .25; }
   .dot.sel { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink); }
   .dot.wed { outline: 2px solid var(--accent); outline-offset: 4px; }
-  .dot.has::after {
-    content: ''; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px;
-    transform: translate(-50%, -50%); border-radius: 50%; background: var(--bg);
-  }
+  .dot.has::after { content: ''; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--bg); }
   .dot.future.has::after { background: var(--ink); }
   .dot.today.has::after { background: #fff; }
   .foot { text-align: center; letter-spacing: 2px; font-size: 12px; color: var(--mute); margin-top: 48px; }
 
-  /* 우측 패널 */
   .panel { background: var(--panel); border-radius: 20px; padding: 22px; align-self: start; position: sticky; top: 24px; }
   .panel h2 { margin: 0; font-size: 20px; }
   .sub { color: var(--mute); font-size: 13px; margin: 4px 0 12px; }
@@ -57,10 +49,7 @@
   .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn.danger { color: #C94A2A; }
   form { display: grid; gap: 8px; margin-bottom: 14px; }
-  input, select, textarea {
-    width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
-    background: var(--bg); color: var(--ink); font-family: inherit; font-size: 14px;
-  }
+  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-family: inherit; font-size: 14px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .owners { display: flex; gap: 6px; }
   .owners label { flex: 1; text-align: center; padding: 9px; border-radius: 10px; border: 1px solid var(--line); cursor: pointer; font-size: 14px; }
@@ -78,6 +67,7 @@
   .todo .tools { display: flex; flex-direction: column; gap: 4px; }
   .todo .tools .btn { padding: 4px 9px; font-size: 12px; }
   .empty { color: var(--mute); font-size: 13px; text-align: center; padding: 20px 0; }
+  .error { color: #C94A2A; padding: 16px; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -138,186 +128,192 @@
 
 <script>
 (function () {
-  const WEDDING = '2027-06-05';
-  const KEY = 'wedding-todos-v2';
-  const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-  const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const DOW = ['M','T','W','T','F','S','S'];
+  try {
+    const WEDDING = '2027-06-05';
+    const KEY = 'wedding-todos-v2';
+    const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+    const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const DOW = ['M','T','W','T','F','S','S'];
 
-  let todos = JSON.parse(localStorage.getItem(KEY) || '[]');
-  const now = new Date();
-  let viewY = now.getFullYear(), viewM = now.getMonth();
-  let sel = fmt(now);
-  let filter = 'all';
-  let editId = null;
+    let todos = [];
+    try { todos = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (_) { todos = []; }
 
-  const $ = id => document.getElementById(id);
-  const p2 = n => String(n).padStart(2, '0');
-  function fmt(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); }
-  function parse(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
-  const save = () => localStorage.setItem(KEY, JSON.stringify(todos));
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const now = new Date();
+    let viewY = now.getFullYear(), viewM = now.getMonth();
+    let sel = fmt(now);
+    let filter = 'all';
+    let editId = null;
 
-  function render() {
-    const today = fmt(new Date());
-    const sd = parse(sel);
-    $('bigDay').textContent = sd.getDate();
-    $('month').textContent = MONTHS[sd.getMonth()];
-    $('year').textContent = sd.getFullYear();
-    $('weekday').textContent = DAYS[sd.getDay()];
-    const diff = Math.round((parse(WEDDING) - parse(today)) / 86400000);
-    $('dday').textContent = diff >= 0 ? diff : '0 (D+' + (-diff) + ')';
-    $('dowRow').innerHTML = DOW.map(d => `<div class="dow">${d}</div>`).join('');
+    const $ = id => document.getElementById(id);
+    const p2 = n => String(n).padStart(2, '0');
+    function fmt(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); }
+    function parse(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+    const save = () => localStorage.setItem(KEY, JSON.stringify(todos));
+    const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-    // 월요일 시작 달력
-    const y = viewY, m = viewM;
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
-    const days = new Date(y, m + 1, 0).getDate();
-    const total = Math.ceil((offset + days) / 7) * 7;
-    let html = '';
-    for (let i = 0; i < total; i++) {
-      const d = new Date(y, m, 1 - offset + i);
-      const ds = fmt(d);
-      const cls = ['dot'];
-      if (d.getMonth() !== m) cls.push('other');
-      if (ds === today) cls.push('today');
-      else if (ds > today) cls.push('future');
-      if (ds === sel) cls.push('sel');
-      if (ds === WEDDING) cls.push('wed');
-      if (todos.some(t => t.date === ds)) cls.push('has');
-      html += `<button class="${cls.join(' ')}" data-d="${ds}" aria-label="${ds}"></button>`;
+    function render() {
+      const today = fmt(new Date());
+      const sd = parse(sel);
+      $('bigDay').textContent = sd.getDate();
+      $('month').textContent = MONTHS[sd.getMonth()];
+      $('year').textContent = sd.getFullYear();
+      $('weekday').textContent = DAYS[sd.getDay()];
+      const diff = Math.round((parse(WEDDING) - parse(today)) / 86400000);
+      $('dday').textContent = diff >= 0 ? diff : '0 (D+' + (-diff) + ')';
+      $('dowRow').innerHTML = DOW.map(d => `<div class="dow">${d}</div>`).join('');
+
+      const y = viewY, m = viewM;
+      const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+      const days = new Date(y, m + 1, 0).getDate();
+      const total = Math.ceil((offset + days) / 7) * 7;
+      let html = '';
+      for (let i = 0; i < total; i++) {
+        const d = new Date(y, m, 1 - offset + i);
+        const ds = fmt(d);
+        const cls = ['dot'];
+        if (d.getMonth() !== m) cls.push('other');
+        if (ds === today) cls.push('today');
+        else if (ds > today) cls.push('future');
+        if (ds === sel) cls.push('sel');
+        if (ds === WEDDING) cls.push('wed');
+        if (todos.some(t => t.date === ds)) cls.push('has');
+        html += `<button class="${cls.join(' ')}" data-d="${ds}" aria-label="${ds}"></button>`;
+      }
+      $('calGrid').innerHTML = html;
+      renderPanel();
     }
-    $('calGrid').innerHTML = html;
-    renderPanel();
-  }
 
-  function renderPanel() {
-    const prefix = viewY + '-' + p2(viewM + 1);
-    const monthTodos = todos.filter(t => t.date.startsWith(prefix));
-    const shown = monthTodos.filter(t => filter === 'all' || t.owner === filter);
-    const done = monthTodos.filter(t => t.done).length;
-    const pct = monthTodos.length ? Math.round(done / monthTodos.length * 100) : 0;
+    function renderPanel() {
+      const prefix = viewY + '-' + p2(viewM + 1);
+      const monthTodos = todos.filter(t => t.date.startsWith(prefix));
+      const shown = monthTodos.filter(t => filter === 'all' || t.owner === filter);
+      const done = monthTodos.filter(t => t.done).length;
+      const pct = monthTodos.length ? Math.round(done / monthTodos.length * 100) : 0;
 
-    $('panelTitle').textContent = (viewM + 1) + '월 할 일';
-    $('panelSub').textContent = `완료 ${done} / ${monthTodos.length} (${pct}%)`;
-    $('progress').style.width = pct + '%';
-    document.querySelectorAll('.filters .btn').forEach(b => b.classList.toggle('on', b.dataset.f === filter));
+      $('panelTitle').textContent = (viewM + 1) + '월 할 일';
+      $('panelSub').textContent = `완료 ${done} / ${monthTodos.length} (${pct}%)`;
+      $('progress').style.width = pct + '%';
+      document.querySelectorAll('.filters .btn').forEach(b => b.classList.toggle('on', b.dataset.f === filter));
 
-    const groups = [
-      { key: 'groom', label: '🤵 신랑 담당', color: 'var(--groom)' },
-      { key: 'bride', label: '👰 신부 담당', color: 'var(--bride)' },
-    ].filter(g => filter === 'all' || filter === g.key);
+      const groups = [
+        { key: 'groom', label: '🤵 신랑 담당', color: 'var(--groom)' },
+        { key: 'bride', label: '👰 신부 담당', color: 'var(--bride)' },
+      ].filter(g => filter === 'all' || filter === g.key);
 
-    let out = '';
-    groups.forEach(g => {
-      const items = shown.filter(t => t.owner === g.key).sort((a, b) => a.date.localeCompare(b.date) || (a.done - b.done));
-      if (!items.length) return;
-      out += `<div class="group"><i style="background:${g.color}"></i>${g.label} (${items.length})</div>`;
-      out += items.map(t => `
-        <div class="todo ${t.done ? 'done' : ''}">
-          <input type="checkbox" data-act="toggle" data-id="${t.id}" ${t.done ? 'checked' : ''}>
-          <div class="body">
-            <div class="title">${t.priority === 'high' ? '🔥 ' : ''}${esc(t.title)}</div>
-            <div class="meta">${t.date}${t.memo ? ' · ' + esc(t.memo) : ''}</div>
-          </div>
-          <div class="tools">
-            <button class="btn" data-act="edit" data-id="${t.id}">수정</button>
-            <button class="btn danger" data-act="delete" data-id="${t.id}">삭제</button>
-          </div>
-        </div>`).join('');
-    });
-    $('list').innerHTML = out || '<div class="empty">이번 달 할 일이 없습니다.</div>';
-  }
-
-  function resetForm() {
-    editId = null;
-    $('todoForm').reset();
-    $('date').value = sel;
-    $('submitBtn').textContent = '추가';
-    $('cancelEdit').style.display = 'none';
-  }
-
-  $('todoForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const data = {
-      title: $('title').value.trim(),
-      owner: document.querySelector('input[name=owner]:checked').value,
-      date: $('date').value,
-      priority: $('priority').value,
-      memo: $('memo').value.trim(),
-    };
-    if (!data.title || !data.date) return;
-    if (editId) {
-      const t = todos.find(x => x.id === editId);
-      if (t) Object.assign(t, data);
-    } else {
-      todos.push({ id: uid(), done: false, ...data });
+      let out = '';
+      groups.forEach(g => {
+        const items = shown.filter(t => t.owner === g.key).sort((a, b) => a.date.localeCompare(b.date) || (a.done - b.done));
+        if (!items.length) return;
+        out += `<div class="group"><i style="background:${g.color}"></i>${g.label} (${items.length})</div>`;
+        out += items.map(t => `
+          <div class="todo ${t.done ? 'done' : ''}">
+            <input type="checkbox" data-act="toggle" data-id="${t.id}" ${t.done ? 'checked' : ''}>
+            <div class="body">
+              <div class="title">${t.priority === 'high' ? '🔥 ' : ''}${esc(t.title)}</div>
+              <div class="meta">${t.date}${t.memo ? ' · ' + esc(t.memo) : ''}</div>
+            </div>
+            <div class="tools">
+              <button class="btn" data-act="edit" data-id="${t.id}">수정</button>
+              <button class="btn danger" data-act="delete" data-id="${t.id}">삭제</button>
+            </div>
+          </div>`).join('');
+      });
+      $('list').innerHTML = out || '<div class="empty">이번 달 할 일이 없습니다.</div>';
     }
-    save();
-    sel = data.date;
-    const d = parse(sel);
-    viewY = d.getFullYear(); viewM = d.getMonth();
-    resetForm();
-    render();
-  });
 
-  $('cancelEdit').addEventListener('click', () => { resetForm(); render(); });
+    function resetForm() {
+      editId = null;
+      $('todoForm').reset();
+      $('date').value = sel;
+      $('submitBtn').textContent = '추가';
+      $('cancelEdit').style.display = 'none';
+    }
 
-  $('list').addEventListener('click', e => {
-    const btn = e.target.closest('[data-act]');
-    if (!btn) return;
-    const id = btn.dataset.id;
-    const t = todos.find(x => x.id === id);
-    if (!t) return;
-    if (btn.dataset.act === 'delete') {
-      if (!confirm('이 할 일을 삭제할까요?')) return;
-      todos = todos.filter(x => x.id !== id);
+    $('todoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const data = {
+        title: $('title').value.trim(),
+        owner: document.querySelector('input[name=owner]:checked').value,
+        date: $('date').value,
+        priority: $('priority').value,
+        memo: $('memo').value.trim(),
+      };
+      if (!data.title || !data.date) return;
+      if (editId) {
+        const t = todos.find(x => x.id === editId);
+        if (t) Object.assign(t, data);
+      } else {
+        todos.push({ id: uid(), done: false, ...data });
+      }
       save();
-      if (editId === id) resetForm();
+      sel = data.date;
+      const d = parse(sel);
+      viewY = d.getFullYear(); viewM = d.getMonth();
+      resetForm();
       render();
-    }
-    if (btn.dataset.act === 'edit') {
-      editId = id;
-      $('title').value = t.title;
-      document.querySelector(`input[name=owner][value=${t.owner}]`).checked = true;
-      $('date').value = t.date;
-      $('priority').value = t.priority;
-      $('memo').value = t.memo || '';
-      $('submitBtn').textContent = '저장';
-      $('cancelEdit').style.display = '';
-      $('title').focus();
-    }
-  });
+    });
 
-  $('list').addEventListener('change', e => {
-    if (e.target.dataset.act !== 'toggle') return;
-    const t = todos.find(x => x.id === e.target.dataset.id);
-    if (t) { t.done = e.target.checked; save(); render(); }
-  });
+    $('cancelEdit').addEventListener('click', () => { resetForm(); render(); });
 
-  $('calGrid').addEventListener('click', e => {
-    const cell = e.target.closest('[data-d]');
-    if (!cell) return;
-    sel = cell.dataset.d;
-    const d = parse(sel);
-    viewY = d.getFullYear(); viewM = d.getMonth();
-    if (!editId) $('date').value = sel;
+    $('list').addEventListener('click', e => {
+      const btn = e.target.closest('[data-act]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const t = todos.find(x => x.id === id);
+      if (!t) return;
+      if (btn.dataset.act === 'delete') {
+        if (!confirm('이 할 일을 삭제할까요?')) return;
+        todos = todos.filter(x => x.id !== id);
+        save();
+        if (editId === id) resetForm();
+        render();
+      }
+      if (btn.dataset.act === 'edit') {
+        editId = id;
+        $('title').value = t.title;
+        document.querySelector(`input[name=owner][value=${t.owner}]`).checked = true;
+        $('date').value = t.date;
+        $('priority').value = t.priority;
+        $('memo').value = t.memo || '';
+        $('submitBtn').textContent = '저장';
+        $('cancelEdit').style.display = '';
+        $('title').focus();
+      }
+    });
+
+    $('list').addEventListener('change', e => {
+      if (e.target.dataset.act !== 'toggle') return;
+      const t = todos.find(x => x.id === e.target.dataset.id);
+      if (t) { t.done = e.target.checked; save(); render(); }
+    });
+
+    $('calGrid').addEventListener('click', e => {
+      const cell = e.target.closest('[data-d]');
+      if (!cell) return;
+      sel = cell.dataset.d;
+      const d = parse(sel);
+      viewY = d.getFullYear(); viewM = d.getMonth();
+      if (!editId) $('date').value = sel;
+      render();
+    });
+
+    $('prev').onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } render(); };
+    $('next').onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } render(); };
+
+    document.querySelector('.filters').addEventListener('click', e => {
+      const b = e.target.closest('.btn');
+      if (!b) return;
+      filter = b.dataset.f;
+      renderPanel();
+    });
+
+    $('date').value = sel;
     render();
-  });
-
-  $('prev').onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } render(); };
-  $('next').onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } render(); };
-
-  document.querySelector('.filters').addEventListener('click', e => {
-    const b = e.target.closest('.btn');
-    if (!b) return;
-    filter = b.dataset.f;
-    renderPanel();
-  });
-
-  $('date').value = sel;
-  render();
+  } catch (err) {
+    document.querySelector('.wrap').innerHTML = '<div class="error">화면 오류: ' + err.message + '</div>';
+    console.error(err);
+  }
 })();
 </script>
 </body>
