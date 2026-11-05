@@ -1,440 +1,118 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Wedding 2027.06.05</title>
-<style>
-  :root {
-    --bg: #E9E8E4; --panel: #F5F4F1; --ink: #121412; --mute: #8C8B87;
-    --line: #DAD9D5; --hollow: #C9C8C4; --accent: #F26A21;
-    --groom: #121412; --bride: #3F7F78; --danger: #C94A2A;
-    --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); min-height: 100vh; }
-  button, input, select, textarea { font-family: inherit; }
-
-  .app { display: grid; grid-template-columns: 64px 250px 1fr 360px; min-height: 100vh; }
-  @media (max-width: 1200px) { .app { grid-template-columns: 64px 220px 1fr; } .panel { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); } }
-  @media (max-width: 800px) { .app { grid-template-columns: 1fr; } .rail, .side { display: none; } }
-
-  /* 좌측 레일 */
-  .rail { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 0; border-right: 1px solid var(--line); }
-  .logo { width: 36px; height: 36px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-weight: 800; }
-  .rail-btn { width: 40px; height: 40px; border-radius: 12px; border: 0; background: none; cursor: pointer; font-size: 16px; color: var(--ink); }
-  .rail-btn:hover { background: var(--panel); }
-
-  /* 사이드 */
-  .side { padding: 22px 18px; border-right: 1px solid var(--line); overflow-y: auto; }
-  .side-head { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
-  .mini { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px 2px; text-align: center; font-size: 12px; }
-  .mini .w { color: var(--mute); font-size: 11px; }
-  .mini button { border: 0; background: none; padding: 5px 0; border-radius: 50%; cursor: pointer; font-size: 12px; color: var(--ink); position: relative; }
-  .mini button.other { color: var(--hollow); }
-  .mini button.today { background: var(--accent); color: #fff; font-weight: 700; }
-  .mini button.sel { box-shadow: inset 0 0 0 1.5px var(--ink); }
-  .mini button.wed { color: var(--accent); font-weight: 800; }
-  .mini .pip { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--ink); }
-  .mini .pip.bride { background: var(--bride); }
-  .dday-card { margin: 22px 0; padding: 16px; border-radius: 16px; background: var(--ink); color: var(--bg); }
-  .dday-card .label { font-size: 10px; letter-spacing: 1px; opacity: .7; }
-  .dday-card .dday { font-size: 30px; font-weight: 800; margin-top: 6px; color: var(--accent); }
-  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
-  .owner-stat { margin-bottom: 12px; font-size: 13px; }
-  .owner-stat .bar { margin-top: 6px; }
-  .owner-stat .bar div { background: var(--ink); }
-  .owner-stat.bride .bar div { background: var(--bride); }
-
-  /* 메인 */
-  .main { padding: 28px 36px; overflow-y: auto; }
-  .main-head { display: flex; justify-content: space-between; align-items: flex-start; }
-  .big { font-size: 120px; font-weight: 800; line-height: .9; letter-spacing: -5px; margin: 0; }
-  .head-right { text-align: right; padding-top: 8px; }
-  .month { font-size: 22px; font-weight: 500; }
-  .nav { display: flex; gap: 6px; justify-content: flex-end; margin-top: 10px; }
-  .nav button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); cursor: pointer; font-size: 18px; color: var(--ink); }
-  .dow-row, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 22px; }
-  .dow-row div { font-size: 12px; color: var(--mute); text-align: center; }
-  .cal-grid button { aspect-ratio: 1.15; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; text-align: left; padding: 8px; position: relative; color: var(--ink); }
-  .cal-grid button:hover { border-color: var(--ink); }
-  .cal-grid button.other { opacity: .35; }
-  .cal-grid button.today { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .cal-grid button.sel { box-shadow: 0 0 0 2px var(--ink); }
-  .cal-grid button.wed { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .cal-grid .num { font-size: 14px; font-weight: 700; }
-  .cal-grid .count { position: absolute; right: 8px; bottom: 8px; font-size: 11px; opacity: .7; }
-  .cal-grid .wedtag { font-size: 10px; font-weight: 700; color: var(--accent); }
-  .cal-grid button.today .wedtag { color: #fff; }
-  .dots { display: flex; gap: 3px; margin-top: 6px; flex-wrap: wrap; }
-  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--groom); display: block; }
-  .dots i.bride { background: var(--bride); }
-  .cal-grid button.today .dots i { background: #fff; }
-  .cal-grid button.today .dots i.bride { background: #cfeee9; }
-
-  .day-detail { margin-top: 26px; }
-  .day-detail h3 { font-size: 16px; margin: 0 0 12px; }
-  .evt { display: flex; gap: 14px; align-items: center; background: var(--panel); border-radius: 14px; padding: 14px 16px; margin-bottom: 8px; }
-  .evt .bar-v { width: 4px; align-self: stretch; border-radius: 2px; background: var(--groom); }
-  .evt.bride .bar-v { background: var(--bride); }
-  .evt .t { font-size: 15px; font-weight: 600; flex: 1; }
-  .evt.done .t { text-decoration: line-through; color: var(--mute); }
-  .evt .who { font-size: 12px; color: var(--mute); }
-  .empty { color: var(--mute); font-size: 13px; padding: 16px 0; text-align: center; }
-
-  /* 우측 패널 */
-  .panel { background: var(--panel); padding: 24px 22px; overflow-y: auto; border-left: 1px solid var(--line); }
-  .panel h2 { margin: 0; font-size: 20px; }
-  .sub { font-size: 13px; color: var(--mute); margin: 4px 0 10px; }
-  .bar { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; }
-  .bar div { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
-  .filters { display: flex; gap: 6px; margin: 16px 0; }
-  .chip { flex: 1; padding: 7px 0; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-size: 13px; color: var(--ink); }
-  .chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .form { display: grid; gap: 8px; margin-bottom: 14px; }
-  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 14px; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .owners { display: flex; gap: 6px; }
-  .owners label { flex: 1; text-align: center; padding: 9px; border-radius: 10px; border: 1px solid var(--line); cursor: pointer; font-size: 14px; background: var(--bg); }
-  .owners input { display: none; }
-  .owners label:has(input:checked) { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .actions { display: flex; justify-content: flex-end; gap: 6px; }
-  .btn { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; font-size: 13px; }
-  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn.danger { color: var(--danger); }
-  .btn.small { padding: 4px 10px; font-size: 12px; }
-  .btn[hidden] { display: none; }
-  .group { font-size: 13px; font-weight: 700; margin: 18px 0 8px; display: flex; align-items: center; gap: 6px; }
-  .group i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-  .todo { display: flex; gap: 10px; padding: 12px; border-radius: 12px; background: var(--bg); margin-bottom: 8px; }
-  .todo input[type=checkbox] { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--accent); flex: none; }
-  .todo .body { flex: 1; min-width: 0; }
-  .todo .title { font-size: 14px; word-break: break-word; }
-  .todo.done .title { text-decoration: line-through; color: var(--mute); }
-  .todo .meta { font-size: 12px; color: var(--mute); margin-top: 4px; }
-  .todo .tools { display: flex; flex-direction: column; gap: 4px; }
-  .error { color: var(--danger); padding: 16px; font-size: 14px; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Our Wedding Planner</title>
+  <meta name="description" content="2027.06.05 아펠가모 광화문 — 결혼 준비 월간 캘린더와 체크리스트">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23e9e8e3'/><text x='32' y='45' font-family='Arial' font-weight='900' font-size='34' text-anchor='middle' fill='%23181917'>W</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<div class="app">
-  <nav class="rail">
-    <div class="logo">W</div>
-    <button class="rail-btn" id="goToday" title="오늘로 이동">●</button>
-  </nav>
+  <div class="app">
+    <!-- ============ Main: monthly calendar ============ -->
+    <main class="main">
+      <header class="cal-header">
+        <div>
+          <p class="eyebrow">OUR WEDDING PLANNER</p>
+          <h1 class="cal-month-ko" id="month-ko"></h1>
+        </div>
+        <div class="cal-header__right">
+          <p class="cal-month-en" id="month-en"></p>
+          <p class="cal-year" id="month-year"></p>
+          <div class="cal-nav">
+            <button class="round-btn" id="prev-month" aria-label="이전 달"><img src="assets/img/icon-prev.svg" width="19" height="19" alt=""></button>
+            <button class="round-btn" id="next-month" aria-label="다음 달"><img src="assets/img/icon-next.svg" width="19" height="19" alt=""></button>
+          </div>
+        </div>
+      </header>
+      <div class="weekdays" aria-hidden="true">
+        <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+      </div>
+      <div class="cal-grid" id="cal-grid" role="grid" aria-label="월간 캘린더"></div>
+    </main>
 
-  <aside class="side">
-    <div class="side-head">Calendar</div>
-    <div class="mini" id="miniCal"></div>
-    <div class="dday-card">
-      <div class="label">WEDDING DAY · 2027.06.05</div>
-      <div class="dday" id="dday"></div>
-    </div>
-    <div class="section-title">담당별 진행률</div>
-    <div id="ownerStats"></div>
-  </aside>
+    <!-- ============ Sidebar ============ -->
+    <aside class="side">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tab-monthly" aria-selected="true" aria-controls="panel-monthly">Monthly</button>
+        <button class="tab" role="tab" id="tab-total" aria-selected="false" aria-controls="panel-total">Total</button>
+      </div>
+      <div class="sidebar">
+        <section class="panel" id="panel-monthly" role="tabpanel" aria-labelledby="tab-monthly">
+          <div class="side-head">
+            <div>
+              <p class="eyebrow">CHECKLIST</p>
+              <h2 class="side-title">Wedding tasks</h2>
+            </div>
+            <p class="dday" id="dday"></p>
+          </div>
+          <div class="progress"><i id="progress-bar"></i></div>
+          <p class="total-count" id="month-total"></p>
+          <div class="stat-row" id="month-stats"></div>
+          <div class="filter-row">
+            <span class="filter-label" id="month-label"></span>
+            <label class="select"><select id="f-day" aria-label="일 필터"></select></label>
+            <label class="select"><select id="f-owner-m" aria-label="담당 필터"></select></label>
+            <label class="select"><select id="f-status-m" aria-label="상태 필터"></select></label>
+          </div>
+          <ul class="task-list" id="month-list"></ul>
+        </section>
 
-  <main class="main">
-    <header class="main-head">
-      <div class="big" id="bigDay"></div>
-      <div class="head-right">
-        <div class="month" id="monthTitle"></div>
-        <div class="nav">
-          <button id="prev" aria-label="이전 달">‹</button>
-          <button id="next" aria-label="다음 달">›</button>
+        <section class="panel" id="panel-total" role="tabpanel" aria-labelledby="tab-total" hidden>
+          <h2 class="side-title side-title--total">Total</h2>
+          <div class="stat-row stat-row--color" id="total-stats"></div>
+          <div class="filter-row filter-row--2">
+            <label class="select"><select id="f-owner-t" aria-label="담당 필터"></select></label>
+            <label class="select"><select id="f-priority-t" aria-label="중요도 필터"></select></label>
+          </div>
+          <div id="total-list"></div>
+        </section>
+
+        <div class="fab-wrap">
+          <button class="fab" id="fab" aria-label="할 일 추가"><img src="assets/img/btn-add.svg" width="108" height="108" alt=""></button>
         </div>
       </div>
-    </header>
-    <div class="dow-row" id="dowRow"></div>
-    <div class="cal-grid" id="calGrid"></div>
-    <section class="day-detail" id="dayDetail"></section>
-  </main>
+    </aside>
+  </div>
 
-  <aside class="panel">
-    <h2 id="panelTitle"></h2>
-    <div class="sub" id="panelSub"></div>
-    <div class="bar"><div id="progress"></div></div>
-
-    <div class="filters">
-      <button class="chip on" data-f="all">전체</button>
-      <button class="chip" data-f="groom">🤵 신랑</button>
-      <button class="chip" data-f="bride">👰 신부</button>
-    </div>
-
-    <form id="todoForm" class="form">
-      <input id="title" placeholder="할 일 (예: 웨딩홀 계약금 입금)" required>
-      <div class="owners">
-        <label><input type="radio" name="owner" value="groom" checked><span>🤵 신랑 담당</span></label>
-        <label><input type="radio" name="owner" value="bride"><span>👰 신부 담당</span></label>
+  <!-- 할 일 추가 -->
+  <dialog class="modal" id="add-dialog" aria-labelledby="add-title">
+    <form class="modal__form" id="add-form" method="dialog">
+      <h2 id="add-title">할 일 추가</h2>
+      <label class="field">제목<input name="title" required maxlength="120"></label>
+      <div class="field-row">
+        <label class="field">마감일<input type="date" name="due_date"></label>
+        <label class="field">담당<select name="owner"></select></label>
       </div>
-      <div class="row">
-        <input type="date" id="date" required>
-        <select id="priority">
-          <option value="normal">보통</option>
-          <option value="high">중요</option>
-          <option value="low">여유</option>
-        </select>
+      <div class="field-row">
+        <label class="field">분류<select name="category"></select></label>
+        <label class="field">중요도<select name="priority"></select></label>
       </div>
-      <textarea id="memo" rows="2" placeholder="메모 (선택)"></textarea>
-      <div class="actions">
-        <button type="button" class="btn" id="cancelEdit" hidden>취소</button>
-        <button type="submit" class="btn primary" id="submitBtn">추가</button>
+      <label class="field">설명<textarea name="description" rows="3"></textarea></label>
+      <div class="modal__actions">
+        <button class="btn btn--ghost" value="cancel" formnovalidate>취소</button>
+        <button class="btn" value="add">추가</button>
       </div>
     </form>
+  </dialog>
 
-    <div id="todoList"></div>
-  </aside>
-</div>
+  <!-- 로그인 (Supabase 모드) -->
+  <dialog class="modal" id="login">
+    <form class="modal__form" id="login-form">
+      <h2>공동 편집 로그인</h2>
+      <p class="muted">등록된 이메일로 로그인 링크를 보내드립니다.</p>
+      <input type="email" name="email" required placeholder="you@example.com" autocomplete="email">
+      <button class="btn" type="submit">로그인 링크 받기</button>
+      <p class="muted" id="login-msg" role="status"></p>
+    </form>
+  </dialog>
 
-<script>
-(function () {
-  try {
-    const WEDDING = '2027-06-05';
-    const KEY = 'wedding-planner-v3';
-    const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-    const DOW = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-    const $ = id => document.getElementById(id);
-
-    /* ---------- 유틸 ---------- */
-    const p2 = n => String(n).padStart(2, '0');
-    const fmt = d => d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
-    const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
-    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-    const ownerLabel = o => (o === 'groom' ? '🤵 신랑' : '👰 신부');
-
-    /* ---------- 데이터 (localStorage CRUD) ---------- */
-    function load() {
-      try {
-        const d = JSON.parse(localStorage.getItem(KEY));
-        return d && Array.isArray(d.todos) ? d : { todos: [] };
-      } catch (e) { return { todos: [] }; }
-    }
-    let data = load();
-    const persist = () => localStorage.setItem(KEY, JSON.stringify(data));
-    const store = {
-      all: () => data.todos.slice(),
-      byMonth(y, m) { const p = y + '-' + p2(m + 1); return data.todos.filter(t => t.date.startsWith(p)); },
-      get: id => data.todos.find(t => t.id === id) || null,
-      add(d) { data.todos.push({ id: uid(), done: false, createdAt: Date.now(), ...d }); persist(); },
-      update(id, patch) { const t = this.get(id); if (t) { Object.assign(t, patch); persist(); } },
-      toggle(id) { const t = this.get(id); if (t) { t.done = !t.done; persist(); } },
-      remove(id) { data.todos = data.todos.filter(t => t.id !== id); persist(); },
-    };
-
-    /* ---------- 상태 ---------- */
-    const now = new Date();
-    const state = { viewY: now.getFullYear(), viewM: now.getMonth(), sel: fmt(now), filter: 'all', editId: null };
-
-    /* ---------- 캘린더 ---------- */
-    function summarize(list) {
-      const map = {};
-      list.forEach(t => {
-        if (!map[t.date]) map[t.date] = { total: 0, done: 0, groom: 0, bride: 0 };
-        map[t.date].total++;
-        if (t.done) map[t.date].done++;
-        map[t.date][t.owner]++;
-      });
-      return map;
-    }
-
-    function cellsHtml(list, today, mini) {
-      const y = state.viewY, m = state.viewM;
-      const offset = (new Date(y, m, 1).getDay() + 6) % 7;
-      const total = Math.ceil((offset + new Date(y, m + 1, 0).getDate()) / 7) * 7;
-      const sum = summarize(list);
-      let html = '';
-      for (let i = 0; i < total; i++) {
-        const d = new Date(y, m, 1 - offset + i);
-        const ds = fmt(d);
-        const info = sum[ds];
-        const cls = [];
-        if (d.getMonth() !== m) cls.push('other');
-        if (ds === today) cls.push('today');
-        if (ds === state.sel) cls.push('sel');
-        if (ds === WEDDING) cls.push('wed');
-        if (mini) {
-          const pip = info ? '<span class="pip' + (info.bride && !info.groom ? ' bride' : '') + '"></span>' : '';
-          html += '<button class="' + cls.join(' ') + '" data-d="' + ds + '">' + d.getDate() + pip + '</button>';
-        } else {
-          const dots = info
-            ? '<div class="dots">' + '<i></i>'.repeat(Math.min(info.groom, 3)) + '<i class="bride"></i>'.repeat(Math.min(info.bride, 3)) + '</div>'
-            : '';
-          html += '<button class="' + cls.join(' ') + '" data-d="' + ds + '">' +
-            '<div class="num">' + d.getDate() + '</div>' +
-            (ds === WEDDING ? '<div class="wedtag">WEDDING</div>' : '') +
-            dots +
-            (info ? '<span class="count">' + info.done + '/' + info.total + '</span>' : '') +
-            '</button>';
-        }
-      }
-      return html;
-    }
-
-    /* ---------- 할 일 패널 ---------- */
-    function renderPanel(monthList) {
-      const shown = monthList.filter(t => state.filter === 'all' || t.owner === state.filter);
-      const done = monthList.filter(t => t.done).length;
-      const pct = monthList.length ? Math.round(done / monthList.length * 100) : 0;
-
-      $('panelTitle').textContent = (state.viewM + 1) + '월 할 일';
-      $('panelSub').textContent = '완료 ' + done + ' / ' + monthList.length + ' (' + pct + '%)';
-      $('progress').style.width = pct + '%';
-      document.querySelectorAll('.chip').forEach(b => b.classList.toggle('on', b.dataset.f === state.filter));
-
-      const groups = [
-        { key: 'groom', label: '🤵 신랑 담당', color: 'var(--groom)' },
-        { key: 'bride', label: '👰 신부 담당', color: 'var(--bride)' },
-      ].filter(g => state.filter === 'all' || state.filter === g.key);
-
-      let out = '';
-      groups.forEach(g => {
-        const items = shown.filter(t => t.owner === g.key).sort((a, b) => a.date.localeCompare(b.date) || (a.done - b.done));
-        if (!items.length) return;
-        out += '<div class="group"><i style="background:' + g.color + '"></i>' + g.label + ' (' + items.length + ')</div>';
-        out += items.map(t =>
-          '<div class="todo' + (t.done ? ' done' : '') + '">' +
-          '<input type="checkbox" data-act="toggle" data-id="' + t.id + '"' + (t.done ? ' checked' : '') + '>' +
-          '<div class="body"><div class="title">' + (t.priority === 'high' ? '🔥 ' : '') + esc(t.title) + '</div>' +
-          '<div class="meta">' + t.date + (t.memo ? ' · ' + esc(t.memo) : '') + '</div></div>' +
-          '<div class="tools">' +
-          '<button class="btn small" data-act="edit" data-id="' + t.id + '">수정</button>' +
-          '<button class="btn small danger" data-act="delete" data-id="' + t.id + '">삭제</button>' +
-          '</div></div>'
-        ).join('');
-      });
-      $('todoList').innerHTML = out || '<div class="empty">이번 달 할 일이 없습니다.</div>';
-    }
-
-    function renderDayDetail(list) {
-      const items = list.filter(t => t.date === state.sel);
-      let html = '<h3>' + state.sel + ' 할 일 (' + items.length + ')</h3>';
-      html += items.length ? items.map(t =>
-        '<div class="evt ' + t.owner + (t.done ? ' done' : '') + '"><div class="bar-v"></div>' +
-        '<div class="t">' + (t.priority === 'high' ? '🔥 ' : '') + esc(t.title) + '</div>' +
-        '<div class="who">' + ownerLabel(t.owner) + (t.done ? ' · 완료' : '') + '</div></div>'
-      ).join('') : '<div class="empty">이 날짜에 등록된 할 일이 없습니다.</div>';
-      $('dayDetail').innerHTML = html;
-    }
-
-    function renderOwnerStats(list) {
-      const stat = o => {
-        const l = list.filter(t => t.owner === o);
-        const done = l.filter(t => t.done).length;
-        return { done, total: l.length, pct: l.length ? Math.round(done / l.length * 100) : 0 };
-      };
-      const g = stat('groom'), b = stat('bride');
-      $('ownerStats').innerHTML =
-        '<div class="owner-stat"><div>🤵 신랑 ' + g.done + '/' + g.total + ' (' + g.pct + '%)</div><div class="bar"><div style="width:' + g.pct + '%"></div></div></div>' +
-        '<div class="owner-stat bride"><div>👰 신부 ' + b.done + '/' + b.total + ' (' + b.pct + '%)</div><div class="bar"><div style="width:' + b.pct + '%"></div></div></div>';
-    }
-
-    function render() {
-      const today = fmt(new Date());
-      const sd = parse(state.sel);
-      const all = store.all();
-      const monthList = store.byMonth(state.viewY, state.viewM);
-
-      $('bigDay').textContent = p2(sd.getDate());
-      $('monthTitle').textContent = MONTHS[state.viewM] + ' ' + state.viewY;
-      $('dowRow').innerHTML = DOW.map(d => '<div>' + d + '</div>').join('');
-      $('calGrid').innerHTML = cellsHtml(all, today, false);
-      $('miniCal').innerHTML = ['M','T','W','T','F','S','S'].map(d => '<div class="w">' + d + '</div>').join('') + cellsHtml(all, today, true);
-
-      const diff = Math.round((parse(WEDDING) - parse(today)) / 86400000);
-      $('dday').textContent = diff > 0 ? 'D-' + diff : diff === 0 ? 'D-DAY' : 'D+' + (-diff);
-
-      renderDayDetail(all);
-      renderOwnerStats(all);
-      renderPanel(monthList);
-      if (!state.editId) $('date').value = state.sel;
-    }
-
-    function moveTo(ds) {
-      const d = parse(ds);
-      state.sel = ds;
-      state.viewY = d.getFullYear();
-      state.viewM = d.getMonth();
-    }
-
-    function resetForm() {
-      state.editId = null;
-      $('todoForm').reset();
-      $('date').value = state.sel;
-      $('submitBtn').textContent = '추가';
-      $('cancelEdit').hidden = true;
-    }
-
-    /* ---------- 이벤트 ---------- */
-    $('calGrid').addEventListener('click', e => {
-      const c = e.target.closest('[data-d]'); if (!c) return;
-      moveTo(c.dataset.d); render();
-    });
-    $('miniCal').addEventListener('click', e => {
-      const c = e.target.closest('[data-d]'); if (!c) return;
-      moveTo(c.dataset.d); render();
-    });
-    $('prev').onclick = () => { const d = new Date(state.viewY, state.viewM - 1, 1); state.viewY = d.getFullYear(); state.viewM = d.getMonth(); render(); };
-    $('next').onclick = () => { const d = new Date(state.viewY, state.viewM + 1, 1); state.viewY = d.getFullYear(); state.viewM = d.getMonth(); render(); };
-    $('goToday').onclick = () => { moveTo(fmt(new Date())); render(); };
-
-    document.querySelector('.filters').addEventListener('click', e => {
-      const b = e.target.closest('.chip'); if (!b) return;
-      state.filter = b.dataset.f; render();
-    });
-
-    $('todoForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const d = {
-        title: $('title').value.trim(),
-        owner: document.querySelector('input[name=owner]:checked').value,
-        date: $('date').value,
-        priority: $('priority').value,
-        memo: $('memo').value.trim(),
-      };
-      if (!d.title || !d.date) return;
-      if (state.editId) store.update(state.editId, d); else store.add(d);
-      moveTo(d.date);
-      resetForm();
-      render();
-    });
-
-    $('cancelEdit').addEventListener('click', () => { resetForm(); render(); });
-
-    $('todoList').addEventListener('click', e => {
-      const btn = e.target.closest('[data-act]'); if (!btn) return;
-      const id = btn.dataset.id;
-      if (btn.dataset.act === 'delete') {
-        if (!confirm('이 할 일을 삭제할까요?')) return;
-        store.remove(id);
-        if (state.editId === id) resetForm();
-        render();
-      } else if (btn.dataset.act === 'edit') {
-        const t = store.get(id); if (!t) return;
-        state.editId = id;
-        $('title').value = t.title;
-        document.querySelector('input[name=owner][value=' + t.owner + ']').checked = true;
-        $('date').value = t.date;
-        $('priority').value = t.priority;
-        $('memo').value = t.memo || '';
-        $('submitBtn').textContent = '저장';
-        $('cancelEdit').hidden = false;
-        $('title').focus();
-      }
-    });
-
-    $('todoList').addEventListener('change', e => {
-      if (e.target.dataset.act === 'toggle') { store.toggle(e.target.dataset.id); render(); }
-    });
-
-    /* ---------- 시작 ---------- */
-    resetForm();
-    render();
-  } catch (err) {
-    document.querySelector('.app').innerHTML = '<div class="error">화면 오류: ' + err.message + '</div>';
-    console.error(err);
-  }
-})();
-</script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>
