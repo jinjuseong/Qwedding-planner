@@ -44,8 +44,16 @@ const ownerBadge = (t) => `<span class="badge badge--${t.owner}">${OWNER[t.owner
 const statusBadge = (t) => `<span class="badge badge--${t.status}">${STATUS[t.status] || t.status}</span>`;
 
 /* ---------------- Calendar ---------------- */
+// 칸 높이에 들어가는 할 일 줄 수 (숫자 영역과 겹치지 않게)
+function rowsThatFit() {
+  if (matchMedia('(max-width: 720px)').matches) return 8;          // 모바일은 점으로 표시
+  const grid = $('#cal-grid');
+  const cellH = (grid.clientHeight - 7 * 5) / 6;
+  return Math.max(1, Math.min(6, Math.floor((cellH - 20 - 17 - 44) / 17)));
+}
+
 function renderCalendar() {
-  const { y, m } = view, today = todayISO();
+  const { y, m } = view, today = todayISO(), maxRows = rowsThatFit();
   $('#month-ko').textContent = `${m}월`;
   $('#month-en').textContent = MONTH_EN[m - 1];
   $('#month-year').textContent = y;
@@ -62,17 +70,19 @@ function renderCalendar() {
     const inMonth = d.getUTCMonth() === m - 1;
     const tasks = (byDate[key] || []).slice().sort((a, b) => (a.status === 'done') - (b.status === 'done'));
     const isWedding = key === S.project.wedding_date;
+    const active = view.day || today;   // 선택한 날짜(없으면 오늘)에 테두리
     const cls = ['cell', inMonth ? '' : 'cell--other', key === today ? 'cell--today' : '',
-      isWedding ? 'cell--wedding' : '', inMonth && view.day === key ? 'cell--selected' : ''].filter(Boolean).join(' ');
-    const shown = inMonth ? tasks.slice(0, 4) : [];
+      isWedding ? 'cell--wedding' : '', inMonth && key === active ? 'cell--active' : ''].filter(Boolean).join(' ');
+    const cap = tasks.length > maxRows ? maxRows - 1 : maxRows;   // "+N건 더" 줄 자리 확보
+    const shown = inMonth ? tasks.slice(0, cap) : [];
     const label = `${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일${tasks.length ? `, 할 일 ${tasks.length}건` : ''}`;
-    html += `<button class="${cls}" data-date="${key}" role="gridcell" aria-label="${label}">
+    html += `<button class="${cls}" data-date="${key}" role="gridcell" aria-label="${label}" aria-selected="${inMonth && view.day === key}">
       <span class="cell__num">${pad(d.getUTCDate())}</span>
       ${key === today && inMonth ? '<span class="cell__today">TODAY</span>' : isWedding ? '<span class="cell__wedding">WEDDING</span>' : ''}
-      ${shown.length ? `<span class="cell__tasks">${shown.map(t => `
+      ${inMonth && tasks.length ? `<span class="cell__tasks">${shown.map(t => `
         <span class="cell-task ${t.status === 'done' ? 'cell-task--done' : ''}">
           <span class="cell-task__title">${esc(t.title)}</span>${ownerBadge(t)}</span>`).join('')}
-        ${tasks.length > 4 ? `<span class="cell__more">+${tasks.length - 4}건 더</span>` : ''}</span>` : ''}
+        ${tasks.length > shown.length ? `<span class="cell__more">${shown.length ? '+' : ''}${tasks.length - shown.length}건${shown.length ? ' 더' : ''}</span>` : ''}</span>` : ''}
     </button>`;
   }
   $('#cal-grid').innerHTML = html;
@@ -190,6 +200,10 @@ function renderTabs() {
     $(`#tab-${k}`).setAttribute('aria-selected', String(view.tab === k));
     $(`#panel-${k}`).hidden = view.tab !== k;
   }
+  document.querySelectorAll('.bnav__tab').forEach(b => {
+    if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  document.body.classList.toggle('tab-total', view.tab === 'total');
 }
 
 function render() { renderCalendar(); renderMonthly(); renderTotal(); renderTabs(); }
@@ -281,6 +295,10 @@ function bind() {
   });
 
   $('#fab').addEventListener('click', openAdd);
+  $('#bnav-add').addEventListener('click', openAdd);
+  document.querySelectorAll('.bnav__tab').forEach(b => b.addEventListener('click', () => {
+    view.tab = b.dataset.tab; renderTabs(); window.scrollTo({ top: 0 });
+  }));
   $('#add-form').addEventListener('submit', (e) => {
     if (e.submitter?.value !== 'add') return;
     const fd = new FormData(e.target);
@@ -311,6 +329,7 @@ async function boot() {
     S = store.state;
     render();
     store.subscribe(() => { S = store.state; render(); });
+    let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderCalendar, 150); });
   } catch (e) {
     console.error(e);
     $('#month-list').innerHTML = `<li class="empty">데이터를 불러오지 못했습니다: ${esc(e.message)}</li>`;
