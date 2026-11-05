@@ -325,7 +325,9 @@ async function boot() {
     let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderCalendar, 150); });
   } catch (e) {
     console.error(e);
-    $('#month-list').innerHTML = `<li class="empty">데이터를 불러오지 못했습니다: ${esc(e.message)}</li>`;
+    const msg = e.message || String(e);
+    $('#month-list').innerHTML = `<li class="empty">데이터를 불러오지 못했습니다.<br><b>${esc(msg)}</b><br><br>
+      Supabase SQL Editor에서 <b>supabase/setup-all.sql</b> 을 실행한 뒤 새로고침해 주세요.</li>`;
   }
 }
 boot();

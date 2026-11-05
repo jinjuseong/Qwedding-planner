@@ -42,8 +42,8 @@ scripts/generate-seed.mjs  wedding.json → seed.sql
 ## 2. 데이터베이스 (Supabase)
 로그인 없이 누구나 조회·추가·수정·삭제할 수 있는 **공개 편집** 방식입니다. 사이트 주소를 아는 사람은 모두 편집할 수 있습니다.
 
-1. Supabase SQL Editor에서 `supabase/schema.sql` → `supabase/seed.sql` 순서로 실행
-   - 예전(로그인 필요) 버전의 `schema.sql`을 이미 실행했다면 `supabase/open-access.sql`만 추가로 실행
+1. Supabase SQL Editor에서 `supabase/setup-all.sql` 하나만 실행 (테이블 + 공개 권한 + 초기 데이터)
+   - 어떤 상태에서든 다시 실행 가능. 단, 할 일 데이터는 MD 원본 상태로 초기화됩니다.
 2. `assets/js/config.js`에 Project URL과 anon(public) 키 입력 → push 하면 자동 배포
 
 ### 테이블

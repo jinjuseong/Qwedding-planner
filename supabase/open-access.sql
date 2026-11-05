@@ -17,3 +17,9 @@ begin
     end if;
   end loop;
 end $$;
+
+-- ---------- API 접근 권한 (로그인 없는 공개 접근) ----------------------
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on all tables in schema public to anon, authenticated;
+grant usage, select on all sequences in schema public to anon, authenticated;
+grant execute on all functions in schema public to anon, authenticated;
