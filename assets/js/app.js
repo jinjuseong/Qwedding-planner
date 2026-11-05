@@ -1,4 +1,4 @@
-import { store, isRemote } from './store.js';
+import { store } from './store.js';
 
 /* ---------------- Labels ---------------- */
 const OWNER = { couple: '둘이', bride: '신부', groom: '신랑', family: '가족', vendor: '업체' };
@@ -310,12 +310,6 @@ function bind() {
     safe(() => store.addTask(task), '할 일을 추가했습니다');
   });
 
-  $('#login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('#login-msg').textContent = '전송 중…';
-    try { await store.signIn(new FormData(e.target).get('email')); $('#login-msg').textContent = '메일함에서 로그인 링크를 눌러 주세요.'; }
-    catch (err) { $('#login-msg').textContent = '실패: ' + err.message; }
-  });
 }
 
 /* ---------------- Boot ---------------- */
@@ -324,8 +318,7 @@ async function boot() {
   view.y = +t.slice(0, 4); view.m = +t.slice(5, 7);
   bind();
   try {
-    const { user } = await store.init();
-    if (isRemote && !user) { $('#login').showModal(); return; }
+    await store.init();
     S = store.state;
     render();
     store.subscribe(() => { S = store.state; render(); });

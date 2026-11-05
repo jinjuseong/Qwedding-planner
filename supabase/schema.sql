@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Wedding Planner 2027 — Supabase(PostgreSQL) schema
 -- 실행 순서: schema.sql → seed.sql  (Supabase Dashboard > SQL Editor)
--- 공동 편집: project_members 에 등록된 이메일로 로그인한 사용자만 읽기/쓰기
+-- 공개 편집: 로그인 없이 누구나 읽기/쓰기 (RLS 정책 using(true))
 -- 실시간 동기화: supabase_realtime publication 에 주요 테이블 등록
 -- =====================================================================
 
@@ -212,17 +212,9 @@ select pr.id as project_id,
   left join tasks t on t.project_id = pr.id
  group by pr.id, pr.budget_target_krw;
 
--- ---------- Row Level Security --------------------------------------
-create or replace function is_member(p uuid, need_edit boolean default false) returns boolean
-language sql stable security definer set search_path = public as $$
-  select exists (
-    select 1 from project_members m
-     where m.project_id = p
-       and lower(m.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
-       and (not need_edit or m.can_edit)
-  );
-$$;
-
+-- ---------- Row Level Security: 로그인 없이 공개 편집 ----------------
+-- 누구나(anon 포함) 조회·추가·수정·삭제할 수 있습니다. 사이트 주소를 아는 사람은 모두 편집 가능.
+-- project_members 는 사용하지 않으며 공개하지 않습니다(정책 없음 = 접근 불가).
 do $$
 declare t text;
 begin
@@ -231,15 +223,9 @@ begin
     execute format('alter table %I enable row level security', t);
     execute format('drop policy if exists %1$s_read  on %1$I', t);
     execute format('drop policy if exists %1$s_write on %1$I', t);
-    if t = 'projects' then
-      execute 'create policy projects_read  on projects for select using (is_member(id))';
-      execute 'create policy projects_write on projects for update using (is_member(id, true)) with check (is_member(id, true))';
-    elsif t = 'project_members' then
-      -- 멤버 목록은 멤버만 조회. 추가/삭제는 SQL Editor(서비스 권한)에서만.
-      execute 'create policy project_members_read on project_members for select using (is_member(project_id))';
-    else
-      execute format('create policy %1$s_read  on %1$I for select using (is_member(project_id))', t);
-      execute format('create policy %1$s_write on %1$I for all using (is_member(project_id, true)) with check (is_member(project_id, true))', t);
+    execute format('drop policy if exists %1$s_public on %1$I', t);
+    if t <> 'project_members' then
+      execute format('create policy %1$s_public on %1$I for all to anon, authenticated using (true) with check (true)', t);
     end if;
   end loop;
 end $$;

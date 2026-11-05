@@ -39,21 +39,18 @@ scripts/generate-seed.mjs  wedding.json → seed.sql
 2. 저장소 **Settings → Pages → Source: GitHub Actions**
 3. push 할 때마다 `.github/workflows/deploy.yml` 이 자동 배포
 
-## 2. 데이터베이스 (Supabase, 무료 플랜 가능)
-1. https://supabase.com 에서 프로젝트 생성
-2. `supabase/seed.sql` 의 `bride@example.com`, `groom@example.com` 을 두 사람의 실제 이메일로 수정
-3. Dashboard → SQL Editor 에서 `schema.sql` → `seed.sql` 순서로 실행
-4. Authentication → URL Configuration 의 Site URL / Redirect URLs 에 GitHub Pages 주소 추가
-5. GitHub 저장소 **Settings → Secrets and variables → Actions → Variables** 에
-   `SUPABASE_URL`, `SUPABASE_ANON_KEY` 추가 (Project Settings → API 에서 확인) → 재배포
+## 2. 데이터베이스 (Supabase)
+로그인 없이 누구나 조회·추가·수정·삭제할 수 있는 **공개 편집** 방식입니다. 사이트 주소를 아는 사람은 모두 편집할 수 있습니다.
 
-배포 후 페이지에서 이메일 로그인 링크로 접속하면, `project_members` 에 등록된 사람만 읽고 쓸 수 있습니다(RLS).
+1. Supabase SQL Editor에서 `supabase/schema.sql` → `supabase/seed.sql` 순서로 실행
+   - 예전(로그인 필요) 버전의 `schema.sql`을 이미 실행했다면 `supabase/open-access.sql`만 추가로 실행
+2. `assets/js/config.js`에 Project URL과 anon(public) 키 입력 → push 하면 자동 배포
 
 ### 테이블
 | 테이블 | 내용 |
 |---|---|
 | `projects` | 예식일·시간·장소·하객 수·예산 목표·준비 원칙 |
-| `project_members` | 공동 편집자 이메일·역할 |
+| `project_members` | (공개 편집 모드에서는 사용하지 않음) |
 | `confirmed_items` | 확정 완료 항목 |
 | `tasks` | 할 일 (md 의 data_model 필드 전체) |
 | `task_dependencies` | 선행 작업 관계 |

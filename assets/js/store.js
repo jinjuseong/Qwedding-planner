@@ -65,30 +65,23 @@ class RemoteStore {
   mode = 'remote';
   async init() {
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm');
-    this.sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const { data: { session } } = await this.sb.auth.getSession();
-    this.user = session?.user || null;
-    if (this.user) await this.load();
-    return { user: this.user };
+    // 로그인 없이 공개 접근 (DB 권한 정책이 anon 읽기/쓰기를 허용)
+    this.sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+    await this.load();
+    return { user: null };
   }
-  async signIn(email) {
-    const { error } = await this.sb.auth.signInWithOtp({
-      email, options: { emailRedirectTo: location.origin + location.pathname } });
-    if (error) throw error;
-  }
-  async signOut() { await this.sb.auth.signOut(); location.reload(); }
   async load() {
     const q = (table, order) => {
       let r = this.sb.from(table).select('*').eq('project_id', PROJECT_ID);
       return order ? r.order(order) : r;
     };
     const [p, c, t, d, s, h, r] = await Promise.all([
-      this.sb.from('projects').select('*').eq('id', PROJECT_ID).single(),
+      this.sb.from('projects').select('*').eq('id', PROJECT_ID).maybeSingle(),
       q('confirmed_items', 'sort_order'), q('tasks', 'id'), q('task_dependencies'),
       q('shoots'), q('honeymoon').maybeSingle(), q('relative_deadline_rules'),
     ]);
     for (const res of [p, c, t, d, s, h, r]) if (res.error) throw res.error;
-    if (!p.data) throw new Error('프로젝트에 접근 권한이 없습니다. project_members 에 이메일이 등록되어 있는지 확인하세요.');
+    if (!p.data) throw new Error('DB에 프로젝트 데이터가 없습니다. supabase/seed.sql 을 실행했는지 확인하세요.');
     const deps = {};
     for (const x of d.data) (deps[x.task_id] ||= []).push(x.depends_on_id);
     const project = { ...p.data, ceremony_time: (p.data.ceremony_time || '').slice(0, 5) };

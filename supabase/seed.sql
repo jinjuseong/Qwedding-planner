@@ -4,7 +4,7 @@ delete from projects where id = '00000000-0000-4000-8000-000000002027';
 insert into projects (id, name, wedding_date, ceremony_time, venue, timezone, status, estimated_guest_count, budget_target_krw, notes)
 values ('00000000-0000-4000-8000-000000002027', 'Our Wedding', '2027-06-05', '12:30', '아펠가모 광화문', 'Asia/Seoul', 'planning', 250, 20000000, array['전체 예산 2,000만원 이하를 목표로 관리한다.', '현재 거주지를 유지할 계획이므로 신혼 가전 구매는 주요 준비 항목에서 제외한다.', '본식 아이폰 스냅은 진행하지 않는다.']::text[]);
 
--- 공동 편집자: 실제 로그인할 이메일로 바꾼 뒤 실행하세요.
+-- (공개 편집 모드에서는 사용하지 않음. 그대로 두어도 됩니다.)
 insert into project_members (project_id, email, role) values
   ('00000000-0000-4000-8000-000000002027', 'bride@example.com', 'bride'),
   ('00000000-0000-4000-8000-000000002027', 'groom@example.com', 'groom');

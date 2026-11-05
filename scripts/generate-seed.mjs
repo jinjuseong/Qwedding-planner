@@ -21,7 +21,7 @@ out.push(`delete from projects where id = '${PID}';`);
 out.push(`insert into projects (id, name, wedding_date, ceremony_time, venue, timezone, status, estimated_guest_count, budget_target_krw, notes)
 values ('${PID}', ${q(p.name)}, ${q(p.wedding_date)}, ${q(p.ceremony_time)}, ${q(p.venue)}, ${q(p.timezone)}, ${q(p.status)}, ${p.estimated_guest_count}, ${p.budget_target_krw}, ${arr(p.notes)});`);
 
-out.push(`\n-- 공동 편집자: 실제 로그인할 이메일로 바꾼 뒤 실행하세요.`);
+out.push(`\n-- (공개 편집 모드에서는 사용하지 않음. 그대로 두어도 됩니다.)`);
 out.push(`insert into project_members (project_id, email, role) values
   ('${PID}', 'bride@example.com', 'bride'),
   ('${PID}', 'groom@example.com', 'groom');`);
