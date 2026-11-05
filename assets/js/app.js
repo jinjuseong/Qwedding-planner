@@ -70,7 +70,7 @@ function renderCalendar() {
     const inMonth = d.getUTCMonth() === m - 1;
     const tasks = (byDate[key] || []).slice().sort((a, b) => (a.status === 'done') - (b.status === 'done'));
     const isWedding = key === S.project.wedding_date;
-    const active = view.day || today;   // 선택한 날짜(없으면 오늘)에 테두리
+    const active = view.day;   // 선택한 날짜에만 검은 테두리 (오늘은 TODAY 표시만)
     const cls = ['cell', inMonth ? '' : 'cell--other', key === today ? 'cell--today' : '',
       isWedding ? 'cell--wedding' : '', inMonth && key === active ? 'cell--active' : ''].filter(Boolean).join(' ');
     const cap = tasks.length > maxRows ? maxRows - 1 : maxRows;   // "+N건 더" 줄 자리 확보
