@@ -1,9 +1,6 @@
 # Our Wedding 2027 — 결혼 준비 플래너
 
-2027.06.05(토) 12:30 아펠가모 광화문 결혼식 준비용 웹페이지입니다.
-`wedding_planner_2027.md` 의 데이터를 기반으로 만들었고, 빌드 없이 GitHub Pages 에 바로 배포됩니다.
 
-화면은 Figma 디자인(Qwedding Planner Figma Design — monthly / total)을 기준으로 구현했습니다.
 
 ## 기능
 - 월간 캘린더: 이전/다음 달 이동, 오늘(TODAY)·결혼식(WEDDING) 표시, 날짜별 할 일과 담당(신랑·신부·둘이) 배지
